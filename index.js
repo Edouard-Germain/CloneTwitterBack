@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const app = express()
 const port = 5000
 const dbName = "twitter"
-const dbUrl = "mongodb+srv://Konexio:CloneTweet001@clonetwitter.lvm6j.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+const dbUrl = "mongodb+srv://Konexio:CloneTweet001@clonetwitter.lvm6j.mongodb.net/twitter?retryWrites=true&w=majority"
 
 const tweetsRoutes = require("./routes/tweets")
 const usersRoutes = require("./routes/users")
