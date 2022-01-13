@@ -1,16 +1,24 @@
-const mongoose = require("mongoose")
+const express = require("express")
+const app = express()
 
-const TweetSchema = new mongoose.Schema({
-    content : {
-        type : String
-    },
-    retweets : [ 
-                { type: Schema.Types.ObjectId, ref: "Retweet" }
-            ]
-},{
-    timestamps : true
+const Tweet = require("../models/Tweet")
+
+app.post('/', async (req, res) => {
+  try {
+    const tweet = await new Tweet({ ...req.body })
+
+    tweet.save((err, garage) => {
+      if (tweet) {
+        res.json(tweet)
+        return
+      }
+      console.log(err)
+      res.status(500).json({ error: err })
+    })
+  } catch (error) {
+    console.log(err)
+    res.status(500).json({ error: err })
+  }
 })
 
-const Tweet = mongoose.model('Tweet', TweetSchema)
-
-module.exports = Car
+module.exports = app

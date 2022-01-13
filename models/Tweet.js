@@ -4,9 +4,15 @@ const TweetSchema = new mongoose.Schema({
     content : {
         type : String
     },
-    retweets : [ 
-                { type: Schema.Types.ObjectId, ref: "Retweet" }
-            ]
+    user : {
+        type : String
+    },
+    // comments : [
+    //     {type: Schema.Types.ObjectId, ref :" Comment"}
+    // ],
+    // retweets : [ 
+    //             { type: Schema.Types.ObjectId, ref: "Tweet" }
+    //         ]
 },{
     timestamps : true
 })
