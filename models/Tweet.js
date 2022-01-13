@@ -4,9 +4,9 @@ const TweetSchema = new mongoose.Schema({
     content : {
         type : String
     },
-    retweets : [ 
-                { type: Schema.Types.ObjectId, ref: "Retweet" }
-            ]
+    // retweets : [ 
+    //             { type: Schema.Types.ObjectId, ref: "Tweet" }
+    //         ]
 },{
     timestamps : true
 })
