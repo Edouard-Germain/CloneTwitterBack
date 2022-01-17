@@ -1,9 +1,12 @@
 const express = require('express')
 const app = express()
+const { body, validationResult } = require('express-validator')
+const { errors } = require('passport-local-mongoose')
+const User = require ("../models/User")
 const Comment = require ("../models/Comment")
 const Tweet = require("../models/Tweet")
 
-app.post('/', async(req,res)=>{
+app.post('/', body('content').isLength({max : 280}),async(req,res)=>{
     try {
       const comment = await new Comment ({... req.body})
       comment.save((err,comment)=>{
@@ -19,9 +22,17 @@ app.post('/', async(req,res)=>{
       res.status(500).json({error : err})
     }
   })
+  
+
   app.delete('/:id', async(req,res)=>{
     const {id} = req.params
     try {
+      const deletedComment = await Comment.findOne({_id: id}).lean()
+      await User.findOneAndUpdate(
+        {_id : deletedComment.User},{
+          $set: {comments: deletedComment.filter(comment=> comment !== id)}
+        },
+        {new : true}).exec()
       await Comment.deleteOne({_id : id}).exec()
       res.status(200).json({ sucess : "Comment deleted"})
     } catch (err) {

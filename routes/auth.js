@@ -27,7 +27,6 @@ app.delete('/logout', (req, res) => {
   res.status(200).send("ok")
 })
 
-
 // Créer un user => POST (C de CRUD pour CREATE)
 
 app.post('/signup', async (req, res) => {
