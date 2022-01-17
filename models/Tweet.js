@@ -1,18 +1,20 @@
 const mongoose = require("mongoose")
+const { Schema, model } = require("mongoose")
+
 
 const TweetSchema = new mongoose.Schema({
     content : {
-        type : String
+        type : String,required: true, minlength: 1, maxlength: 280
     },
     user : {
         type : String
     },
-    // comments : [
-    //     {type: Schema.Types.ObjectId, ref :" Comment"}
-    // ],
-    // retweets : [ 
-    //             { type: Schema.Types.ObjectId, ref: "Tweet" }
-    //         ]
+    comments : [
+        {type: mongoose.Schema.Types.ObjectId, ref :"Comment"}
+    ],
+    retweets :[
+        {type: mongoose.Schema.Types.ObjectId, ref :"User"}
+    ] 
 },{
     timestamps : true
 })

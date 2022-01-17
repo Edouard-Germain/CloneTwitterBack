@@ -4,7 +4,7 @@ const passport = require("../config/passport")
 
 const User = require("../models/User")
 
-const { verifyUser } = require("../middlewares/auth")
+const { hasAutorization } = require("../middlewares/auth")
 
 
 // Récupérer tous les users 
@@ -40,7 +40,7 @@ app.get('/:username', async (req, res) => {
 
 // Modifier un user
 
-app.put('/:username', verifyUser, async (req, res) => {
+app.put('/:username', hasAutorization, async (req, res) => {
   const { username } = req.params
   
   try {

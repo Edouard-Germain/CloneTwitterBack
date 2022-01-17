@@ -28,6 +28,7 @@ app.use(cors({
   credentials: true
 }))
 
+
 app.use(express.json())
 
 // Configure Sessions Middleware

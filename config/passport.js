@@ -5,28 +5,30 @@ const User = require("../models/User")
 
 
 // Local Strategy 
-passport.use(new LocalStrategy(User.authenticate()))
+// passport.use(new LocalStrategy(User.authenticate()))
 
-// passport.use(new LocalStrategy(
-//     async (email, password, done) => {
-       
-//             try {
-//                 // Find user with email
-//                 const user = await User.findOne({ email: email }) 
-//                 if (!user) {
-//                     return done(null, false, 
-//                         { message: 'No user by that email' });
-//                 } else {
-//                  // Match with the password
-//                 }
-                   
-//             } catch (err) {
-//                 console.log(err)
-//                 res.status(500).json({ error: err })
-//             }
-//     })
-// )
-
+passport.use(
+    new LocalStrategy(
+      {
+        usernameField: "email",
+        passwordField: "password"
+      },
+      (email, password, done) => {
+        User.findOne({ email: email }, (err, user) => {
+          if (err) {
+            return done(err);
+          }
+          if (!user) {
+            return done(null, false, { message: "Unknown user" });
+          }
+          if (!user.authenticate(password)) {
+            return done(null, false, { message: "Invalid password" });
+          }
+          return done(null, user);
+        });
+      }
+    )
+  );
 
 // lors de l'authentification
 // sérialise l'instance utilisateur avec les informations transmises 

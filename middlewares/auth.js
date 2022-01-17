@@ -1,11 +1,23 @@
-const verifyUser = (req, res, next) => {
-    if (req.user) { // je check si mon user est bien connecté
+const User = require("../models/User")
+
+// Vérifier si user déjà connecté 
+
+const hasAutorization = async (req, res, next) => {
+
+  try {
+    const userLogged = await User.findOne({ _id: id }).exec()
+    if (userLogged._id === req.user.id) {
       next()
-    } else {
-      res.status(401).json({ error: "Unauthorized" })
     }
+    return
+
+  } catch (err) {
+    res.status(401).json({ error: "You need to be logged" })
+    res.redirect('/login')
+  }
 }
-  
+ 
+
 module.exports = {
-  verifyUser
+  hasAutorization,
 }
