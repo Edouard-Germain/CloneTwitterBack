@@ -7,6 +7,7 @@ const dbUrl = "mongodb+srv://Konexio:CloneTweet001@clonetwitter.lvm6j.mongodb.ne
 
 const tweetsRoutes = require("./routes/tweets")
 const usersRoutes = require("./routes/users")
+const commentRoutes = require("./routes/comment")
 
 mongoose.connect(dbUrl)
 const db = mongoose.connection
@@ -23,6 +24,7 @@ app.use(express.json()
 )
 app.use('/tweets', tweetsRoutes)
 app.use('/users', usersRoutes)
+app.use('comment', commentRoutes)
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`)
