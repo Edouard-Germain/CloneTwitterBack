@@ -1,38 +1,62 @@
 const express = require("express")
 const app = express()
+const passport = require("../config/passport")
 
 const User = require("../models/User")
-const Tweet = require("../models/Tweet")
-const Comment = require("../models/Comment")
 
-// Créer un user => POST (C de CRUD pour CREATE)
+const { verifyUser } = require("../middlewares/auth")
 
-app.post('/', async (req, res) => {
-    const { tweet } = req.body
-    const { comment } = req.body
+
+// Récupérer tous les users 
+
+app.get('/', async (req, res) => {
   
-    try {
-      const user = await new User({ ...req.body })
-      
-      user.save(async (err, user) => {
-        
-        if (user) {
-            const getTweet = await Tweet.findById(tweet)
-            getTweet.users.push(user._id)
-            getTweet.save()
-    
-            res.json(user)
-            return
-          }
-    
-          console.log(err)
-          res.status(500).json({ error: err })
-        })
+  try {
+    const users = await User.find({}).exec()
+    res.json(users)
 
-    } catch (err) {
-      console.log(err)
-      res.status(500).json({ error: err })
-    }
-  })
+  } catch (err) {
+    res.status(500).json({ error: err })
+  }
+})
+
+
+// Récupérer un user 
+
+app.get('/:username', async (req, res) => {
+  const { username } = req.params
+  
+  try {
+    const user = await User.findOne({ username : username })
+    .populate('Tweet', 'content user comments')
+    .exec()
+    res.json(user)
+
+  } catch (err) {
+    res.status(500).json({ error: err })
+  }
+})
+
+
+// Modifier un user
+
+app.put('/:username', verifyUser, async (req, res) => {
+  const { username } = req.params
+  
+  try {
+    const user = await User.findOneAndUpdate(
+      { username : username  },
+      { ...req.body },
+      { new: true }
+    ).exec()
+
+    res.json(user)
+
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ error: err })
+  }
+})
+
 
 module.exports = app
