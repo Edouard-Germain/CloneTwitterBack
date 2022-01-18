@@ -9,14 +9,9 @@ const User = require("../models/User")
 
 app.post('/login', passport.authenticate("local"), 
     (req, res) => {
-        if (req.user) {
-        req.logIn(req.user, err => {
-            if (err) {
-            console.log(err)
-            }
-        })
-        }
-})
+        res.status(200).send("You're login")
+    }
+)
 
 
 // Logout d'un user existant

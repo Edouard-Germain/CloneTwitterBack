@@ -5,7 +5,6 @@ const User = require("../models/User")
 
 
 // Local Strategy 
-// passport.use(new LocalStrategy(User.authenticate()))
 
 passport.use(
     new LocalStrategy(
@@ -19,7 +18,7 @@ passport.use(
             return done(err);
           }
           if (!user) {
-            return done(null, false, { message: "Unknown user" });
+            return done(null, false, { message: "Unknown email" });
           }
           if (!user.authenticate(password)) {
             return done(null, false, { message: "Invalid password" });
@@ -40,7 +39,7 @@ passport.serializeUser((user, done) => {
 // à chaque demande ultérieure de désérialisation de l'instance, 
 // fournit l'identifiant de cookie unique en tant que «justificatif d'identité»
 passport.deserializeUser((id, done) => {
-    User.findbyId(id, (err, user) => {
+    User.findById(id, (err, user) => {
         done(err, user)
     })
 })
