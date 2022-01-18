@@ -11,7 +11,8 @@ const dbUrl = "mongodb+srv://Konexio:CloneTweet001@clonetwitter.lvm6j.mongodb.ne
 const tweetsRoutes = require("./routes/tweets")
 const usersRoutes = require("./routes/users")
 const authRoutes = require("./routes/auth")
-
+const feedRoutes = require("./routes/feed")
+// configure Mongoose
 mongoose.connect(dbUrl)
 const db = mongoose.connection
 
@@ -44,6 +45,7 @@ app.use(passport.session())
 app.use('/tweets', tweetsRoutes)
 app.use('/users', usersRoutes)
 app.use('/auth', authRoutes)
+app.use('/feed', feedRoutes)
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`)

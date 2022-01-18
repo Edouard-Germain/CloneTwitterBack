@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator')
 const Comment = require ("../models/Comment")
 const Tweet = require("../models/Tweet")
 
+/// Creation d'un tweet///
 app.post('/',  body('content').isLength({max: 280}), async (req, res) => {
 
   try {
@@ -22,10 +23,12 @@ app.post('/',  body('content').isLength({max: 280}), async (req, res) => {
     }
 })
 
+/// supression d'un tweet///
 
 app.delete('/:id', async(req,res)=>{
   const {id} = req.params
   const deletedTweet = await Tweet.findOne({_id: id}).lean()
+  //// Supression dans le tableau de user///
       await User.findOneAndUpdate(
         {_id : deletedTweet.User},{
           $set: {comments: deletedTweet.filter(tweet=> tweet !== id)}
@@ -41,8 +44,7 @@ app.delete('/:id', async(req,res)=>{
 /// Route pour récup les commentaires///
 app.get('/:id', async(req,res)=>{
   const {id} = req.params
-  console.log(req.body)
-  console.log(req.params)
+  
   try {
     const comments = await Tweet.findById(id)
     .populate('comment', 'content user')
