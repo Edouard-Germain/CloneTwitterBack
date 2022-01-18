@@ -12,20 +12,22 @@ passport.use(
         usernameField: "email",
         passwordField: "password"
       },
-      (email, password, done) => {
-        User.findOne({ email: email }, (err, user) => {
-          if (err) {
-            return done(err);
-          }
-          if (!user) {
-            return done(null, false, { message: "Unknown email" });
-          }
-          if (!user.authenticate(password)) {
-            return done(null, false, { message: "Invalid password" });
-          }
-          return done(null, user);
-        });
+      async (email, password, done) => {
+        const user = await User.findOne({ email: email });
+        // if (!user) {
+        //   return done(null, false, { message: "Unknown email" });
+        // }
+        // if (!user.authenticate(password)) {
+        //   return done(null, false, { message: "Invalid password" });
+        // }
+
+        if (!user) {
+          return done(null, false, { message: "Invalid password" })
+        } // on met pas de else parce que le return nous fait sortir de la fonction
+      
+        return done(null, user)
       }
+      
     )
   );
 

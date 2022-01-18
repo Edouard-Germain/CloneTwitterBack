@@ -5,7 +5,7 @@ const multer = require("multer")
 
 
 const User = require("../models/User")
-// const { hasAutorization } = require("../middlewares/auth")
+const { hasAutorization } = require("../middlewares/auth")
 
 const upload = multer({ dest: 'public' })
 
@@ -31,7 +31,7 @@ app.get('/:id', async (req, res) => {
   
   try {
     const user = await User.findOne({ _id : id })
-    .populate('Tweet', 'content user comments')
+    .populate('tweets', 'content user comments')
     .exec()
     res.json(user)
 
@@ -43,7 +43,7 @@ app.get('/:id', async (req, res) => {
 
 // Modifier un user
 
-app.put('/:id', async (req, res) => {
+app.put('/:id',hasAutorization, async (req, res) => {
   const { id } = req.params
   
   try {

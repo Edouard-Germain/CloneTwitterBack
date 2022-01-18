@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator')
 const Comment = require ("../models/Comment")
 const Tweet = require("../models/Tweet")
 
+
 app.post('/',  body('content').isLength({max: 280}), async (req, res) => {
 
   try {
