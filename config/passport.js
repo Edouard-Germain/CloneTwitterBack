@@ -1,6 +1,6 @@
 const passport = require("passport")
 const LocalStrategy = require('passport-local').Strategy;
-
+const mongoose = require("mongoose")
 const User = require("../models/User")
 
 
@@ -33,7 +33,7 @@ passport.use(
 // sérialise l'instance utilisateur avec les informations transmises 
 // et la stocke dans la session via un cookie
 passport.serializeUser((user, done) => {
-    done(null, user.id)
+    done(null, user._id)
 })
 
 // à chaque demande ultérieure de désérialisation de l'instance, 
