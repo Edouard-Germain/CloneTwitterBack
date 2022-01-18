@@ -29,6 +29,9 @@ app.use(cors({
   credentials: true
 }))
 
+// Acces dossier public
+app.use(express.static('public'))
+
 app.use(express.json())
 
 // Configure Sessions Middleware

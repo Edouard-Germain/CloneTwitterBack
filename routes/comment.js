@@ -27,12 +27,11 @@ app.post('/', body('content').isLength({max : 280}),async(req,res)=>{
   app.delete('/:id', async(req,res)=>{
     const {id} = req.params
     try {
-      const deletedComment = await Comment.findOne({_id: id}).lean()
-      await User.findOneAndUpdate(
+      const deletedComment = await Comment.findOne({_id: id})
+      await User.updateOne(
         {_id : deletedComment.User},{
-          $set: {comments: deletedComment.filter(comment=> comment !== id)}
-        },
-        {new : true}).exec()
+          $pull: {comments: deletedComment._id}
+        }).exec()
       await Comment.deleteOne({_id : id}).exec()
       res.status(200).json({ sucess : "Comment deleted"})
     } catch (err) {

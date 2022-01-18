@@ -5,14 +5,12 @@ const UserSchema = Schema({
     username: {
         type: String,
         required: [true, "Please enter your username"],
-    },
-    name: {
-        type: String,
-        required: true,
+        unique: true,
     },
     email: {
         type: String,
         required: true,
+        unique: true,
     },
     password: {
         type: String,
@@ -21,12 +19,10 @@ const UserSchema = Schema({
     },
     pictureUrl: {
         type: String, 
-        default:
-            "https://res.cloudinary.com/douy56nkf/image/upload/v1594060920/defaults/txxeacnh3vanuhsemfc8.png",
+        default: "https://i0.wp.com/sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png?ssl=1",
     },
+    name: String,
     bio: String, 
-    birthDate: Date,
-    location: String,
     websiteUrl: String, 
     followers: [
         { type: Schema.Types.ObjectId, ref: "User" },
@@ -48,7 +44,7 @@ const UserSchema = Schema({
   })
   
 
-  UserSchema.plugin(passportLocalMongoose)
+  UserSchema.plugin(passportLocalMongoose, { usernameField: "email" })
 
   const User = model('User', UserSchema)
 

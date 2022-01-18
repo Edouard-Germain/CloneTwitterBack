@@ -3,6 +3,8 @@ const app = express()
 const { body, validationResult } = require('express-validator')
 const Comment = require ("../models/Comment")
 const Tweet = require("../models/Tweet")
+const User = require("../models/User")
+
 
 /// Creation d'un tweet///
 app.post('/',  body('content').isLength({max: 280}), async (req, res) => {
@@ -13,6 +15,7 @@ app.post('/',  body('content').isLength({max: 280}), async (req, res) => {
     tweet.save((err, tweet) => {
       if (tweet) {
         res.json(tweet)
+        User.updateOne({_id : tweet.user}, {$push: {tweets : tweet._id}}).exec()
         return
         }
       res.status(500).json({ error: err })
@@ -27,15 +30,11 @@ app.post('/',  body('content').isLength({max: 280}), async (req, res) => {
 
 app.delete('/:id', async(req,res)=>{
   const {id} = req.params
-  const deletedTweet = await Tweet.findOne({_id: id}).lean()
-  //// Supression dans le tableau de user///
-      await User.findOneAndUpdate(
-        {_id : deletedTweet.User},{
-          $set: {comments: deletedTweet.filter(tweet=> tweet !== id)}
-        },
-        {new : true}).exec()
   try {
+    const deletedTweet = await Tweet.findById(id)
     await Tweet.deleteOne({_id : id}).exec()
+    User.updateOne({_id : deletedTweet.user}, {$pull: {tweets : id}}).exec()
+
     res.status(200).json({ sucess : "Tweet deleted"})
   } catch (err) {
     res.status(500).json({error : err})
@@ -44,7 +43,6 @@ app.delete('/:id', async(req,res)=>{
 /// Route pour récup les commentaires///
 app.get('/:id', async(req,res)=>{
   const {id} = req.params
-  
   try {
     const comments = await Tweet.findById(id)
     .populate('comment', 'content user')
