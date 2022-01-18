@@ -8,7 +8,7 @@ const User = require("../models/User")
 // Login d'un user existant
 
 app.post('/login', 
-  passport.authenticate("local", { failureRedirect: '/login', failureMessage: true }), 
+  passport.authenticate("local"), 
   (req, res) => {
       if (req.user) {
         req.logIn(req.user, err => {
