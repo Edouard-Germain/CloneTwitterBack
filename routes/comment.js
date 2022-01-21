@@ -6,22 +6,22 @@ const User = require ("../models/User")
 const Comment = require ("../models/Comment")
 const Tweet = require("../models/Tweet")
 
-app.post('/', body('content').isLength({max : 280}),async(req,res)=>{
+app.post(
+  '/', 
+  body('content').isLength({max : 280}), 
+  async (req, res) => {
     try {
-      const comment = await new Comment ({... req.body})
-      comment.save((err,comment)=>{
-        if(comment){
-          res.json(comment)
-          console.log(comment)
-          return
-        }
-        res.status(500).json({error:err})
-      })
+      const comment = new Comment ({... req.body})
+
+      const commentInsered = await comment.save()
+
+      res.json(commentInsered)
     } catch (error){
       console.log(err)
       res.status(500).json({error : err})
     }
-  })
+  }
+)
   
 
   app.delete('/:id', async(req,res)=>{

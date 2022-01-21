@@ -47,9 +47,11 @@ app.get('/:id', async(req,res)=>{
   const {id} = req.params
   try {
     const comments = await Tweet.findById(id)
-    .populate({path : 'comments',
-    model : 'Comment'})
-    .exec()
+      .populate({
+        path : 'comments',
+        model : 'Comment'
+      })
+      .exec()
     console.log(comments)
     res.json(comments)
   } catch(err){
