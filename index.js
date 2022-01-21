@@ -12,6 +12,7 @@ const tweetsRoutes = require("./routes/tweets")
 const usersRoutes = require("./routes/users")
 const authRoutes = require("./routes/auth")
 const feedRoutes = require("./routes/feed")
+const commentsRoutes = require("./routes/comment")
 // configure Mongoose
 mongoose.connect(dbUrl)
 const db = mongoose.connection
@@ -49,6 +50,7 @@ app.use('/tweets', tweetsRoutes)
 app.use('/users', usersRoutes)
 app.use('/auth', authRoutes)
 app.use('/feed', feedRoutes)
+app.use('/comments', commentsRoutes)
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`)

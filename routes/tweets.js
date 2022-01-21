@@ -38,21 +38,28 @@ app.delete('/:id', async(req,res)=>{
     res.status(200).json({ sucess : "Tweet deleted"})
   } catch (err) {
     res.status(500).json({error : err})
+    console.log("error", err)
   }
 })
-/// Route pour récup les commentaires///
+
+/// Route pour récup un tweet///
 app.get('/:id', async(req,res)=>{
   const {id} = req.params
   try {
     const comments = await Tweet.findById(id)
-    .populate('comment', 'content user')
+    .populate({path : 'comments',
+    model : 'Comment'})
     .exec()
+    console.log(comments)
     res.json(comments)
   } catch(err){
     console.log(err)
     res.status(500).json({error: err})
+    console.log(err)
   }
 })
+
+//////// USELESS BUT TO PARANOID TO DELETE/////
 app.get('/', async (req, res) => {
   try {
     const tweets = await Tweet.find().exec()

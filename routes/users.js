@@ -28,10 +28,10 @@ app.get('/', async (req, res) => {
 
 app.get('/:id', async (req, res) => {
   const { id } = req.params
-  
+
   try {
     const user = await User.findOne({ _id : id })
-    .populate('tweets', 'content user comments')
+    .populate({ path : 'user', model : 'user'})
     .exec()
     res.json(user)
 
@@ -60,6 +60,8 @@ app.put('/:id',hasAutorization, async (req, res) => {
     res.status(500).json({ error: err })
   }
 })
+
+
 
 
 // Poster image profil
