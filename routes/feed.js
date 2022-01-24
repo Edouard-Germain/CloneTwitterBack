@@ -30,7 +30,9 @@ app.get('/',async (req, res)=>{
                     path : 'user',
                     model : 'User'
                 })
+                .sort({"createdAt": -1})
                 .exec()
+
             res.json(tweets)
         } catch (err){
             console.log(err)
@@ -45,7 +47,12 @@ app.get('/',async (req, res)=>{
 app.get('/:id', async (req, res) => {
     const { id } = req.params 
     try {
-        const userTweets = await Tweet.find({user : id })
+        const userTweets = await Tweet
+        .find({user : id })
+        // .populate({
+        //     path: 'user',
+        //     model: 'User'
+        // })
         res.json(userTweets)
 
     } catch (err) {

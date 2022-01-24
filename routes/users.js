@@ -15,11 +15,13 @@ const upload = multer({ dest: 'public' })
 app.get('/', async (req, res) => {
   
   try {
-    const users = await User.find({}).exec()
+    const users = await User.find({})
+    .exec()
     res.json(users)
 
   } catch (err) {
     res.status(500).json({ error: err })
+    console.log(err)
   }
 })
 
@@ -31,12 +33,21 @@ app.get('/:id', async (req, res) => {
 
   try {
     const user = await User.findOne({ _id : id })
-    .populate({ path : 'user', model : 'user'})
+    // .populate({ path : 'user', model : 'user'})
+    .populate({
+      path : "tweets",
+       model : "Tweet",
+       populate : {
+         path: "user",
+         model : "User"
+       }
+    })
     .exec()
     res.json(user)
-
+    console.log("user", user)
   } catch (err) {
     res.status(500).json({ error: err })
+    console.log("err",err)
   }
 })
 
@@ -45,7 +56,7 @@ app.get('/:id', async (req, res) => {
 
 app.put('/:id',hasAutorization, async (req, res) => {
   const { id } = req.params
-  
+  console.log('Hello world')
   try {
     const user = await User.findOneAndUpdate(
       { _id : id  },
