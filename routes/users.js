@@ -2,7 +2,7 @@ const express = require("express")
 const app = express()
 const passport = require("../config/passport")
 const multer = require("multer")
-
+const fs = require("fs")
 
 const User = require("../models/User")
 const { hasAutorization } = require("../middlewares/auth")
@@ -62,14 +62,13 @@ app.put('/:id',hasAutorization, async (req, res) => {
 })
 
 
-
-
 // Poster image profil
 
-app.post('/:id/upload', upload.single('photo'), async (req, res) => {
+app.post('/:id/upload', upload.single('pictureUrl'), async (req, res) => {
   const { id } = req.params
-  console.log(req.file.path)
-  const pictureUrl = `${req.file.destination}/${req.file.originalname}`
+  const pictureName = `${req.file.originalname}`
+  fs.renameSync(req.file.path, `${req.file.destination}/${pictureName}`)
+  const pictureUrl = `http://localhost:5000/${pictureName}`
   
   try {
     // Using upsert option (creates new doc if no match is found):
@@ -88,8 +87,6 @@ app.post('/:id/upload', upload.single('photo'), async (req, res) => {
     console.error(err.message);
     return res.status(500).json({ error: err })
   }
-
-
 })
 
 

@@ -15,7 +15,7 @@ app.get('/',async (req, res)=>{
                     path : 'user',
                     model : 'User'
                 })
-                .sort({"createdAt": -1})
+                .sort({"createdAt": +1})
                 
               res.json(zeFeed)
         } catch (err){

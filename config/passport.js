@@ -13,7 +13,7 @@ passport.use(
         passwordField: "password"
       },
       async (email, password, done) => {
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({ email: email, password: password });
 
 
         if (!user) {
